@@ -106,13 +106,14 @@ services:
         --outbound-transport ws \
         --outbound-transport http \
         --genesis-url '${LEDGER_URL}/genesis' \
-        --auto-ping-connection \
-        --auto-respond-messages \
-        --auto-respond-credential-offer \
-        --auto-respond-presentation-request \
-        --auto-verify-presentation \
         --auto-accept-invites \
         --auto-accept-requests \
+        --auto-ping-connection \
+        --auto-respond-messages \
+        --auto-respond-credential-proposal \
+        --auto-respond-credential-offer \
+        --auto-respond-credential-request \
+        --auto-verify-presentation \
         --wallet-type 'indy' \
         --wallet-name 'icat_agent_wallet' \
         --wallet-key '${WALLET_ENCRYPTION_KEY}' \
@@ -127,7 +128,8 @@ services:
       ]
 
   myorg-wallet-db:
-    image: registry.access.redhat.com/rhscl/postgresql-95-rhel7:9.5
+    #image: registry.access.redhat.com/rhscl/postgresql-95-rhel7:9.5
+    image: postgresql
     environment:
       - POSTGRESQL_USER=${POSTGRESQL_USER}
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}

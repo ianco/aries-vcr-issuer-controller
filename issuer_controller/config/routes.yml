@@ -1,14 +1,14 @@
 # Documentation: https://github.com/bcgov/von-agent-template/tree/master/von-x-agent/config
 
 forms:
-  my-organizationmy-registration:
-    path: /my-organization/my-registration
+  ian-comy-registration:
+    path: /ian-co/my-registration
     type: issue-credential
-    schema_name: my-registration.my-organization
-    page_title: Title for my-registration.my-organization
-    title: Title for my-registration.my-organization
+    schema_name: my-registration.ian-co
+    page_title: Title for my-registration.ian-co
+    title: Title for my-registration.ian-co
     template: bcgov.index.html
-    description: The my-registration credential issued by my-organization
+    description: The my-registration credential issued by ian-co
     explanation: Use the form below to issue a Credential.
     fields:
     - name: registration_date
@@ -60,12 +60,12 @@ forms:
       - name: corp_num
         from: helper
         source: uuid
-  my-organizationmy-relationship:
-    path: /my-organization/my-relationship
+  ian-comy-relationship:
+    path: /ian-co/my-relationship
     type: issue-credential
-    schema_name: my-relationship.my-organization
-    page_title: Title for my-relationship.my-organization
-    title: Title for my-relationship.my-organization
+    schema_name: my-relationship.ian-co
+    page_title: Title for my-relationship.ian-co
+    title: Title for my-relationship.ian-co
     template: bcgov.index.html
     description: The relationship between two organizations
     explanation: Use the form below to issue a Credential.
@@ -115,14 +115,14 @@ forms:
       required: false
     mapping:
       attributes: []
-  my-organizationmy-permit:
-    path: /my-organization/my-permit
+  ian-coian-permit:
+    path: /ian-co/ian-permit
     type: issue-credential
-    schema_name: my-permit.my-organization
-    page_title: Title for my-permit.my-organization
-    title: Title for my-permit.my-organization
+    schema_name: ian-permit.ian-co
+    page_title: Title for ian-permit.ian-co
+    title: Title for ian-permit.ian-co
     template: bcgov.index.html
-    description: The my-permit credential issued by my-organization
+    description: The ian-permit credential issued by ian-co
     explanation: Use the form below to issue a Credential.
     proof_request:
       id: greenlight_registration

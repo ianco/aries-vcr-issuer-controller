@@ -217,7 +217,6 @@ def set_credential_thread_id(cred_exch_id, thread_id):
     credential_lock.acquire()
     try:
         # add 2 records so we can x-ref
-        print("Set cred_exch_id, thread_id", cred_exch_id, thread_id)
         credential_threads[thread_id] = cred_exch_id
         credential_threads[cred_exch_id] = thread_id
     finally:
@@ -227,6 +226,7 @@ def set_credential_thread_id(cred_exch_id, thread_id):
 def add_credential_request(cred_exch_id):
     credential_lock.acquire()
     try:
+        # add record
         result_available = threading.Event()
         credential_requests[cred_exch_id] = result_available
         return result_available
@@ -247,18 +247,15 @@ def add_credential_response(cred_exch_id, response):
 
 
 def add_credential_problem_report(thread_id, response):
-    print("get problem report for thread", thread_id)
     if thread_id in credential_threads:
         cred_exch_id = credential_threads[thread_id]
         add_credential_response(cred_exch_id, response)
     else:
-        print("thread_id not found", thread_id)
         # hack for now
         if 1 == len(list(credential_requests.keys())):
             cred_exch_id = list(credential_requests.keys())[0]
             add_credential_response(cred_exch_id, response)
         else:
-            print("darn, too many outstanding requests :-(")
             print(credential_requests)
 
 
@@ -293,6 +290,7 @@ def get_credential_response(cred_exch_id):
 
 
 TOPIC_CONNECTIONS = "connections"
+TOPIC_CONNECTIONS_ACTIVITY = "connections_actvity"
 TOPIC_CREDENTIALS = "credentials"
 TOPIC_PRESENTATIONS = "presentations"
 TOPIC_GET_ACTIVE_MENU = "get-active-menu"
@@ -301,7 +299,7 @@ TOPIC_ISSUER_REGISTRATION = "issuer_registration"
 TOPIC_PROBLEM_REPORT = "problem-report"
 
 # max 15 second wait for a credential response (prevents blocking forever)
-MAX_CRED_RESPONSE_TIMEOUT = 15
+MAX_CRED_RESPONSE_TIMEOUT = 35
 
 
 def handle_connections(state, message):
@@ -398,7 +396,6 @@ class SendCredentialThread(threading.Thread):
         self.cred_response = get_credential_response(
             cred_data["credential_exchange_id"]
         )
-        print("Got response", self.cred_response)
 
 
 def handle_send_credential(cred_input):

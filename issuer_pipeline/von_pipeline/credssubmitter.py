@@ -28,10 +28,10 @@ import time
 import traceback
 from von_pipeline.config import config
 
-AGENT_URL = os.environ.get('VONX_API_URL', 'http://localhost:5000/von_data')
+AGENT_URL = os.environ.get('VONX_API_URL', 'http://localhost:5000')
 
 CREDS_BATCH_SIZE = 3000
-CREDS_REQUEST_SIZE = 1     # use 1 because it's more likely to trigger deadlocks
+CREDS_REQUEST_SIZE = 20     # use 1 because it's more likely to trigger deadlocks
 MAX_CREDS_REQUESTS = 16
 
 
@@ -113,7 +113,7 @@ async def post_credentials(http_client, conn, credentials):
                 cur2 = None
                 success = success + 1
             else:
-                print("log error to database")
+                #print("log error to database")
                 #print(result['result'])
                 #print(credential)
                 cur2 = conn.cursor()
@@ -233,10 +233,10 @@ class CredsSubmitter:
                     i = i + 1
                     processed_count = processed_count + 1
                     if processed_count >= 100:
-                      print('>>> Processing {} of {} credentials.'.format(i, cred_count))
-                      processing_time = time.perf_counter() - start_time
-                      print('Processing: ' + str(processing_time))
-                      processed_count = 0
+                        print('>>> Processing {} of {} credentials.'.format(i, cred_count))
+                        processing_time = time.perf_counter() - start_time
+                        print('Processing: ' + str(processing_time))
+                        processed_count = 0
                     credential = {'RECORD_ID':row[0], 'SYSTEM_TYP_CD':row[1], 
                                   'CREDENTIAL_TYPE_CD':row[2], 'CREDENTIAL_ID':row[3], 'CREDENTIAL_JSON':row[4],  
                                   'SCHEMA_NAME':row[5], 'SCHEMA_VERSION':row[6], 'ENTRY_DATE':row[7]}
@@ -248,17 +248,17 @@ class CredsSubmitter:
                         tasks.append(creds_task)
                         #await asyncio.sleep(1)
                         if single_thread:
-                          # running single threaded - wait for each task to complete
-                          await creds_task
+                            # running single threaded - wait for each task to complete
+                            await creds_task
                         else:
-                          # multi-threaded, check if we are within MAX_CREDS_REQUESTS active requests
-                          active_tasks = len([task for task in tasks if not task.done()])
-                          #print("Added task - active = ", active_tasks, ", posted creds = ", len(post_creds))
-                          while active_tasks >= MAX_CREDS_REQUESTS:
-                            #await asyncio.gather(*tasks)
-                            done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-                            active_tasks = len(pending)
-                            # print("Waited task - active = ", active_tasks)
+                            # multi-threaded, check if we are within MAX_CREDS_REQUESTS active requests
+                            active_tasks = len([task for task in tasks if not task.done()])
+                            #print("Added task - active = ", active_tasks, ", posted creds = ", len(post_creds))
+                            while active_tasks >= MAX_CREDS_REQUESTS:
+                                #await asyncio.gather(*tasks)
+                                done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+                                active_tasks = len(pending)
+                                # print("Waited task - active = ", active_tasks)
                         credentials = []
                         cred_owner_id = ''
 
