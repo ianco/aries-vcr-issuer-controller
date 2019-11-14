@@ -30,9 +30,9 @@ from von_pipeline.config import config
 
 AGENT_URL = os.environ.get('VONX_API_URL', 'http://localhost:5000')
 
-CREDS_BATCH_SIZE = 3000
-CREDS_REQUEST_SIZE = 1     # use 1 because it's more likely to trigger deadlocks
-MAX_CREDS_REQUESTS = 16
+CREDS_BATCH_SIZE = 6000
+CREDS_REQUEST_SIZE = 5    # use 1 because it's more likely to trigger deadlocks
+MAX_CREDS_REQUESTS = 32
 
 
 async def submit_cred_batch(http_client, creds):
@@ -284,6 +284,7 @@ class CredsSubmitter:
                 print('>>> Processing {} of {} credentials.'.format(i, cred_count))
                 processing_time = time.perf_counter() - start_time
                 print('Processing: ' + str(processing_time))
+                print(60*cred_count/processing_time, "credentials per minute")
 
                 cur = self.conn.cursor()
                 cur.execute(sql1a)

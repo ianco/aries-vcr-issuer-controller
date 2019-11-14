@@ -76,6 +76,9 @@ configureEnvironment () {
   export APPLICATION_URL=${APPLICATION_URL-http://localhost:${WEB_HTTP_PORT:-5001}}
   export ENDPOINT_URL=http://${ENDPOINT_HOST-$DOCKERHOST:${WEB_HTTP_PORT:-5001}}
 
+  export ANON_AGENT_PORT=5060
+  export EXPOSED_ANON_AGENT_PORT=5060
+
   # myorg-agent
   export AGENT_ADMIN_PORT=8034
   export TOB_AGENT_ADMIN_PORT=8024
