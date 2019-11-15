@@ -108,6 +108,7 @@ services:
       TOB_ADMIN_API_KEY: ${TOB_ADMIN_API_KEY}
     networks:
       - myorg
+      - orgbook
     ports:
       - ${EXPOSED_ANON_AGENT_PORT}:${ANON_AGENT_PORT}
     entrypoint: >
@@ -255,3 +256,6 @@ volumes:
 
 networks:
   myorg:
+  orgbook:
+    external:
+      name: tob_tob

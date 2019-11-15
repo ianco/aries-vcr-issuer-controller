@@ -9,6 +9,8 @@ import uuid
 import time
 import yaml
 import config
+import pytz
+from datetime import datetime
 
 # Load application settings (environment)
 config_root = os.environ.get('CONFIG_ROOT', '../config')
@@ -30,6 +32,90 @@ def health_check():
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+DID = None
+TOB_CONNECTION_ID = None
+SCHEMAS = None
+CRED_DEFS = None
+agent_lock = threading.Lock()
+
+def get_did():
+    global DID
+    if not DID:
+        try:
+            agent_lock.acquire()
+
+            if not DID:
+                print("Calling get_did()")
+                response = requests.get(
+                        "http://myorg-agent:8034/wallet/did/public",
+                        headers = {"accept": "application/json"}
+                    )
+                response.raise_for_status()
+                result = response.json()
+                did = result["result"]
+                print("Fetched DID from agent: ", did)
+                DID = did["did"]
+        finally:
+            agent_lock.release()
+
+    return DID
+
+def load_cred_defs():
+    global CRED_DEFS
+    if not CRED_DEFS:
+        try:
+            agent_lock.acquire()
+
+            if not CRED_DEFS:
+                print("Calling load_cred_defs()")
+
+                # load schemas
+                response = requests.get(
+                        "http://myorg-agent:8034/schemas/created",
+                        headers = {"accept": "application/json"}
+                    )
+                response.raise_for_status()
+                schs_result = response.json()
+                SCHEMAS = {}
+                for schema_id in schs_result["schema_ids"]:
+                    response = requests.get(
+                            "http://myorg-agent:8034/schemas/" + schema_id,
+                            headers = {"accept": "application/json"}
+                        )
+                    response.raise_for_status()
+                    sch_result = response.json()
+                    SCHEMAS[schema_id] = sch_result["schema_json"]
+
+                # load cred defs
+                response = requests.get(
+                        "http://myorg-agent:8034/credential-definitions/created",
+                        headers = {"accept": "application/json"}
+                    )
+                response.raise_for_status()
+                cds_result = response.json()
+                CRED_DEFS = {}
+                for cred_def_id in cds_result["credential_definition_ids"]:
+                    response = requests.get(
+                            "http://myorg-agent:8034/credential-definitions/" + cred_def_id,
+                            headers = {"accept": "application/json"}
+                        )
+                    response.raise_for_status()
+                    cd_result = response.json()
+                    CRED_DEFS[cred_def_id] = { "cred_def": cd_result["credential_definition"], "schema_id": None }
+                    schema_seq = cd_result["credential_definition"]["schemaId"]
+                    for schema in SCHEMAS:
+                        if str(SCHEMAS[schema]["seqNo"]) == schema_seq:
+                            CRED_DEFS[cred_def_id]["schema_id"] = SCHEMAS[schema]["id"]
+                            break
+
+        finally:
+            agent_lock.release()
+
+def get_schema_id(cred_def_id):
+    load_cred_defs()
+    cred_def = CRED_DEFS[cred_def_id]
+    return cred_def["schema_id"]
+
 class SendCredentialThread(threading.Thread):
     def __init__(self, cred_input, cred_exch_id, url, headers):
         threading.Thread.__init__(self)
@@ -44,9 +130,69 @@ class SendCredentialThread(threading.Thread):
             # delay
             #time.sleep(0.01)
 
+            # check if we have the issuing agent's DID (if not get it)
+            agent_did = get_did()
+            tob_connection_id = self.cred_input["connection_id"]
+            thread_id = str(uuid.uuid4())
+
+            # post the credential directly to ICOB
+            tob_url = "http://tob-api:8080/agentcb/topic/credentials/"
+            tob_state = "credential_received"
+            cred_def_id = self.cred_input["credential_definition_id"]
+            schema_id = get_schema_id(cred_def_id)
+            updated_date = str(datetime.now(pytz.utc))
+            credential_msg = {
+                "auto_issue": False,
+                "connection_id": tob_connection_id,
+                "created_at": updated_date,
+                "credential_definition_id": cred_def_id,
+                "credential_exchange_id": self.cred_exch_id,
+                "credential_offer": {
+                    "Not": "Used"
+                } ,
+                "credential_request": {
+                    "Not": "Used"
+                } ,
+                "credential_request_metadata": {
+                    "Not": "Used"
+                } ,
+                "initiator": "external",
+                "raw_credential": {
+                    "cred_def_id": cred_def_id,
+                    "rev_reg": None,
+                    "rev_reg_id": None,
+                    "schema_id": schema_id,
+                    "signature": {
+                        "Not": "Used"
+                    } ,
+                    "signature_correctness_proof": {
+                        "Not": "Used"
+                    } ,
+                    "values": {
+                    },
+                    "witness": None
+                },
+                "schema_id": schema_id,
+                "state": tob_state,
+                "thread_id": thread_id,
+                "updated_at": updated_date
+            }
+            for key in self.cred_input["credential_values"]:
+                key_value = {
+                    "raw": self.cred_input["credential_values"][key],
+                    "encoded": "Not used"
+                }
+                credential_msg["raw_credential"]["values"][key] = key_value
+            #print(credential_msg)
+
+            # post to ICOB
+            response = requests.post(
+                tob_url, json.dumps(credential_msg), headers=self.headers
+            )
+            response.raise_for_status()
+
             # post a confirmation web hook
             state = "stored"
-            thread_id = str(uuid.uuid4())
             response_msg = {
                     "state": state, 
                     "credential_exchange_id": self.cred_exch_id, 

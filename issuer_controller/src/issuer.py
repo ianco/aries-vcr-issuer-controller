@@ -484,7 +484,7 @@ def handle_send_credential(cred_input):
         thread = SendCredentialThread(
             credential_definition_id,
             cred_offer,
-            # agent_admin_url + "/credential_exchange/send",
+            #agent_admin_url + "/credential_exchange/send",
             "http://myorg-anon-agent:5060/api/credential_exchange/send",
             ADMIN_REQUEST_HEADERS,
         )
