@@ -176,6 +176,7 @@ services:
         --${AGENT_ADMIN_MODE} \
         --label ${AGENT_NAME} \
         --log-level 'error' \
+        --timing \
         --plugin indy_catalyst_issuer_registration",
       ]
 
@@ -183,7 +184,8 @@ services:
 #        --log-level 'debug' \
 
   myorg-wallet-db:
-    image: registry.access.redhat.com/rhscl/postgresql-95-rhel7:9.5
+    #image: registry.access.redhat.com/rhscl/postgresql-95-rhel7:9.5
+    image: postgresql
     environment:
       - POSTGRESQL_USER=${POSTGRESQL_USER}
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
