@@ -24,9 +24,72 @@ class Controller(Flask):
 app_anon_agent = Controller()
 wsgi_app = app_anon_agent.wsgi_app
 
+timing_lock = threading.Lock()
+record_timings = True
+timings = {}
+
+def clear_stats():
+    global timings
+    timing_lock.acquire()
+    try:
+        timings = {}
+    finally:
+        timing_lock.release()
+
+def get_stats():
+    timing_lock.acquire()
+    try:
+        return timings
+    finally:
+        timing_lock.release()
+
+def log_timing_method(method, start_time, end_time, success, data=None):
+    if not record_timings:
+        return
+
+    timing_lock.acquire()
+    try:
+        elapsed_time = end_time - start_time
+        if not method in timings:
+            timings[method] = {
+                'total_count': 1,
+                'success_count': 1 if success else 0,
+                'fail_count': 0 if success else 1,
+                'min_time': elapsed_time,
+                'max_time': elapsed_time,
+                'total_time': elapsed_time,
+                'avg_time': elapsed_time,
+                'data': {}
+            }
+        else:
+            timings[method]['total_count'] = timings[method]['total_count'] + 1
+            if success:
+                timings[method]['success_count'] = timings[method]['success_count'] + 1
+            else:
+                timings[method]['fail_count'] = timings[method]['fail_count'] + 1
+            if elapsed_time > timings[method]['max_time']:
+                timings[method]['max_time'] = elapsed_time
+            if elapsed_time < timings[method]['min_time']:
+                timings[method]['min_time'] = elapsed_time
+            timings[method]['total_time'] = timings[method]['total_time'] + elapsed_time
+            timings[method]['avg_time'] = timings[method]['total_time'] / timings[method]['total_count']
+        if data:
+            timings[method]['data'][str(timings[method]['total_count'])] = data
+    finally:
+        timing_lock.release()
+
 @app_anon_agent.route('/health', methods=['GET'])
 def health_check():
     return make_response(jsonify({'success': True}), 200)
+
+@app_anon_agent.route('/status/reset', methods=['GET'])
+def clear_status():
+    clear_stats()
+    return make_response(jsonify({'success': True}), 200)
+
+@app_anon_agent.route('/status', methods=['GET'])
+def get_status():
+    return make_response(jsonify(get_stats()), 200)
 
 @app_anon_agent.errorhandler(404)
 def not_found(error):
@@ -116,6 +179,27 @@ def get_schema_id(cred_def_id):
     cred_def = CRED_DEFS[cred_def_id]
     return cred_def["schema_id"]
 
+SEND_ALL_WEB_HOOKS = True
+SEND_TO_ICOB = False
+
+def send_web_hook(url, state, cred_exch_id, thread_id, cred_input, headers):
+    start_time = time.perf_counter()
+    method = 'webhook.credential.' + state
+
+    response_msg = {
+            "state": state, 
+            "credential_exchange_id": cred_exch_id, 
+            "thread_id": thread_id, 
+            "message": cred_input
+        }
+    response = requests.post(
+        url, json.dumps(response_msg), headers=headers
+    )
+    response.raise_for_status()
+
+    end_time = time.perf_counter()
+    log_timing_method(method, start_time, end_time, True)
+
 class SendCredentialThread(threading.Thread):
     def __init__(self, cred_input, cred_exch_id, url, headers):
         threading.Thread.__init__(self)
@@ -135,74 +219,77 @@ class SendCredentialThread(threading.Thread):
             tob_connection_id = self.cred_input["connection_id"]
             thread_id = str(uuid.uuid4())
 
-            # post the credential directly to ICOB
-            tob_url = "http://tob-api:8080/agentcb/topic/credentials/"
-            tob_state = "credential_received"
-            cred_def_id = self.cred_input["credential_definition_id"]
-            schema_id = get_schema_id(cred_def_id)
-            updated_date = str(datetime.now(pytz.utc))
-            credential_msg = {
-                "auto_issue": False,
-                "connection_id": tob_connection_id,
-                "created_at": updated_date,
-                "credential_definition_id": cred_def_id,
-                "credential_exchange_id": self.cred_exch_id,
-                "credential_offer": {
-                    "Not": "Used"
-                } ,
-                "credential_request": {
-                    "Not": "Used"
-                } ,
-                "credential_request_metadata": {
-                    "Not": "Used"
-                } ,
-                "initiator": "external",
-                "raw_credential": {
-                    "cred_def_id": cred_def_id,
-                    "rev_reg": None,
-                    "rev_reg_id": None,
-                    "schema_id": schema_id,
-                    "signature": {
-                        "Not": "Used"
-                    } ,
-                    "signature_correctness_proof": {
-                        "Not": "Used"
-                    } ,
-                    "values": {
-                    },
-                    "witness": None
-                },
-                "schema_id": schema_id,
-                "state": tob_state,
-                "thread_id": thread_id,
-                "updated_at": updated_date
-            }
-            for key in self.cred_input["credential_values"]:
-                key_value = {
-                    "raw": self.cred_input["credential_values"][key],
-                    "encoded": "Not used"
-                }
-                credential_msg["raw_credential"]["values"][key] = key_value
-            #print(credential_msg)
+            if SEND_ALL_WEB_HOOKS:
+                # post some status web hooks
+                send_web_hook(self.url, "offer_sent", self.cred_exch_id, thread_id, self.cred_input, self.headers)
+                send_web_hook(self.url, "request_received", self.cred_exch_id, thread_id, self.cred_input, self.headers)
+                send_web_hook(self.url, "issued", self.cred_exch_id, thread_id, self.cred_input, self.headers)
 
-            # post to ICOB
-            response = requests.post(
-                tob_url, json.dumps(credential_msg), headers=self.headers
-            )
-            response.raise_for_status()
+            if SEND_TO_ICOB:
+                start_time = time.perf_counter()
+                method = 'post_icob.credential'
+
+                # post the credential directly to ICOB
+                tob_url = "http://tob-api:8080/agentcb/topic/credentials/"
+                tob_state = "credential_received"
+                cred_def_id = self.cred_input["credential_definition_id"]
+                schema_id = get_schema_id(cred_def_id)
+                updated_date = str(datetime.now(pytz.utc))
+                credential_msg = {
+                    "auto_issue": False,
+                    "connection_id": tob_connection_id,
+                    "created_at": updated_date,
+                    "credential_definition_id": cred_def_id,
+                    "credential_exchange_id": self.cred_exch_id,
+                    "credential_offer": {
+                        "Not": "Used"
+                    } ,
+                    "credential_request": {
+                        "Not": "Used"
+                    } ,
+                    "credential_request_metadata": {
+                        "Not": "Used"
+                    } ,
+                    "initiator": "external",
+                    "raw_credential": {
+                        "cred_def_id": cred_def_id,
+                        "rev_reg": None,
+                        "rev_reg_id": None,
+                        "schema_id": schema_id,
+                        "signature": {
+                            "Not": "Used"
+                        } ,
+                        "signature_correctness_proof": {
+                            "Not": "Used"
+                        } ,
+                        "values": {
+                        },
+                        "witness": None
+                    },
+                    "schema_id": schema_id,
+                    "state": tob_state,
+                    "thread_id": thread_id,
+                    "updated_at": updated_date
+                }
+                for key in self.cred_input["credential_values"]:
+                    key_value = {
+                        "raw": self.cred_input["credential_values"][key],
+                        "encoded": "Not used"
+                    }
+                    credential_msg["raw_credential"]["values"][key] = key_value
+                #print(credential_msg)
+
+                # post to ICOB
+                response = requests.post(
+                    tob_url, json.dumps(credential_msg), headers=self.headers
+                )
+                response.raise_for_status()
+
+                end_time = time.perf_counter()
+                log_timing_method(method, start_time, end_time, True)
 
             # post a confirmation web hook
-            state = "stored"
-            response_msg = {
-                    "state": state, 
-                    "credential_exchange_id": self.cred_exch_id, 
-                    "thread_id": thread_id, 
-                    "message": self.cred_input
-                }
-            response = requests.post(
-                self.url, json.dumps(response_msg), headers=self.headers
-            )
-            response.raise_for_status()
+            send_web_hook(self.url, "stored", self.cred_exch_id, thread_id, self.cred_input, self.headers)
 
         except Exception as exc:
             # don't re-raise; just print status

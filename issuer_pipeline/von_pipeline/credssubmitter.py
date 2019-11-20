@@ -32,8 +32,8 @@ AGENT_URL = os.environ.get('VONX_API_URL', 'http://localhost:5000')
 
 CREDS_BATCH_SIZE = 3000
 CREDS_REQUEST_SIZE = 5     # use 1 because it's more likely to trigger deadlocks
-MAX_CREDS_REQUESTS = 16
-MAX_PROCESSING_MINS = 10
+MAX_CREDS_REQUESTS = 32
+MAX_PROCESSING_MINS = 100
 PROCESS_LOOP_REPORT_CT = 100
 
 

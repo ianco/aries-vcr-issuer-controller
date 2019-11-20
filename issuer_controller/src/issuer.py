@@ -529,6 +529,8 @@ class SendCredentialThread(threading.Thread):
         #print("Got response", self.cred_response, "time=", processing_time)
 
 
+TEST_ANON_AGENT = True
+
 def handle_send_credential(cred_input):
     """
     # other sample data
@@ -583,11 +585,14 @@ def handle_send_credential(cred_input):
             "credential_definition_id": credential_definition_id,
             "credential_values": credential["attributes"],
         }
+        if TEST_ANON_AGENT:
+            agent_url = "http://myorg-anon-agent:5060/api/credential_exchange/send"
+        else:
+            agent_url = agent_admin_url + "/credential_exchange/send"
         thread = SendCredentialThread(
             credential_definition_id,
             cred_offer,
-            #agent_admin_url + "/credential_exchange/send",
-            "http://myorg-anon-agent:5060/api/credential_exchange/send",
+            agent_url,
             ADMIN_REQUEST_HEADERS,
         )
         thread.start()
