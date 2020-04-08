@@ -1,10 +1,10 @@
 # Documentation: https://github.com/bcgov/von-agent-template/tree/master/von-x-agent/config
 
-- name: my-registration.my-organization
+- name: my-registration.ian-co
   version: '1.0.0'
-  description: The my-registration credential issued by my-organization
+  description: The my-registration credential issued by ian-co
   endpoint: $ENDPOINT_URL
-  path: /my-organization/my-registration
+  path: /ian-co/my-registration
   # identify the attribute which identify the owning organization
   topic: corp_num
   # optionally identify the credential attribute to map to the TOB credential effective date
@@ -81,7 +81,7 @@
       data_type: ui_date
       required: false
 
-- name: my-relationship.my-organization
+- name: my-relationship.ian-co
   version: '1.0.0'
   description: The relationship between two organizations
   endpoint: $ENDPOINT_URL
@@ -93,7 +93,7 @@
   #revoked_date: expiry_date
   # optionally identify a dependant proof request
   proof_request: greenlight_registration
-  path: /my-organization/my-relationship
+  path: /ian-co/my-relationship
   attributes:
     corp_num:
       label_en: Registration ID
@@ -150,9 +150,9 @@
       data_type: ui_date
       required: false
 
-- name: my-permit.my-organization
+- name: ian-permit.ian-co
   version: '1.0.0'
-  description: The my-permit credential issued by my-organization
+  description: The ian-permit credential issued by ian-co
   endpoint: $ENDPOINT_URL
   # identify the attribute which identify the owning organization
   topic: corp_num
@@ -162,7 +162,7 @@
   #revoked_date: expiry_date
   # optionally identify a dependant proof request
   proof_request: greenlight_registration
-  path: /my-organization/my-permit
+  path: /ian-co/ian-permit
   attributes:
     corp_num:
       label_en: Registration ID

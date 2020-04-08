@@ -1,8 +1,8 @@
 # Documentation: https://github.com/bcgov/von-agent-template/tree/master/von-x-agent/config
 
-- name: my-registration.my-organization
+- name: my-registration.ian-co
   version: 1.0.0
-  description: The my-registration credential issued by my-organization
+  description: The my-registration credential issued by ian-co
   attributes:
     corp_num:
       description_en: Registration/Incorporation Number or Identifying Number
@@ -78,7 +78,7 @@
       label_en: Credential Expiry Date
       data_type: ui_date
       required: false
-- name: my-relationship.my-organization
+- name: my-relationship.ian-co
   version: 1.0.0
   description: The relationship between two organizations
   attributes:
@@ -127,9 +127,9 @@
       label_en: Credential Expiry Date
       data_type: ui_date
       required: false
-- name: my-permit.my-organization
+- name: ian-permit.ian-co
   version: 1.0.0
-  description: The my-permit credential issued by my-organization
+  description: The ian-permit credential issued by ian-co
   attributes:
     corp_num:
       description_en: Registration/Incorporation Number or Identifying Number
@@ -166,6 +166,67 @@
       label_en: Credential Effective Date
       data_type: ui_date
       required: true
+- name: cannabis-retail-store-licence.lcrb
+  version: '1.0.23'
+  description: Cannabis Retail Store Licence Issued by Liquor and Cannabis Regulation Branch
+  path: /cannabis-retail-store-licence
+  cardinality:
+    - licence_number
+  attributes:
+    registration_id:
+      description_en: Registration ID
+      data_type: text
+      required: true
+    licence_number:
+      label_en: Licence Number
+      description_en: Licence Number
+      data_type: text
+      required: true
+    issue_date:
+      label_en: Issue Date
+      description_en: Issue Date
+      data_type: date
+      required: true
+    effective_date:
+      label_en: Effective Date
+      description_en: Effective Date
+      data_type: date
+      required: true
+    expiry_date:
+      label_en: Expiry Date
+      description_en: Expiry Date
+      data_type: date
+      required: true
+    establishment_name:
+      label_en: Establishment Name
+      description_en: Establishment Name
+      data_type: text
+      required: true
+    civic_address:
+      label_en: Civic Address
+      description_en: Civic Address
+      data_type: text
+      required: false
+    city:
+      label_en: City
+      description_en: City
+      data_type: text
+      required: false
+    province:
+      label_en: Province
+      description_en: Province
+      data_type: text
+      required: false
+    postal_code:
+      label_en: Postal Code
+      description_en: Postal Code
+      data_type: text
+      required: false
+    country:
+      label_en: Country
+      description_en: Country
+      data_type: text
+      required: false
 
 ### eof ###
 

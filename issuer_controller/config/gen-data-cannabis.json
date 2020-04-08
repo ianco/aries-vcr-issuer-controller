@@ -1,0 +1,19 @@
+[
+    {
+        "attributes": {
+            "registration_id": "BC0908182",
+            "licence_number": "MYCANNI12345",
+            "issue_date": "2020-01-27",
+            "expiry_date": "",
+            "establishment_name": "Canni 4 U",
+            "effective_date": "2020-01-27",
+            "civic_address": "123 My Street",
+            "city": "Victoria",
+            "country": "Canada",
+            "postal_code": "V1V 1V1",
+            "province": "BC"
+        },
+        "schema": "cannabis-retail-store-licence.lcrb",
+        "version": "1.0.23"
+    }
+]

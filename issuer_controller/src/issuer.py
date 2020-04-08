@@ -58,7 +58,7 @@ def agent_schemas_cred_defs(agent_admin_url):
             agent_admin_url + "/schemas/" + schema_id, headers=ADMIN_REQUEST_HEADERS
         )
         response.raise_for_status()
-        schema = response.json()["schema_json"]
+        schema = response.json()["schema"]
         schema_key = schema["name"] + "::" + schema["version"]
         ret_schemas[schema_key] = {"schema": schema, "schema_id": str(schema["seqNo"])}
 
