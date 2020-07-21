@@ -1,0 +1,11 @@
+[
+    {
+        "attributes": {
+            "supplier_subject_id": "1ace17d8-df50-439b-94ab-51f5cc15c068",
+            "contract_subject_id" :"PW-$XLV-175-6623",
+            "effective_date": "2020-07-16"
+        },
+        "schema": "pspc-supplier-contract-relationship.pspc",
+        "version": "1.0.0"
+    }
+]

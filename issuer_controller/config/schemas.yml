@@ -1,171 +1,241 @@
 # Documentation: https://github.com/bcgov/von-agent-template/tree/master/von-x-agent/config
 
-- name: my-registration.my-organization
-  version: 1.0.0
-  description: The my-registration credential issued by my-organization
+- name: pspc-supplier-credential.pspc
+  version: '1.0.0'
+  description: The pspc-supplier-credential credential issued by Public Services and Procurement Canada
   attributes:
-    corp_num:
-      description_en: Registration/Incorporation Number or Identifying Number
-      label_en: Registration ID
-      data_type: helper_uuid
-      required: true
-    registration_date:
-      description_en: Date of Registration, Incorporation, Continuation or Amalgamation
-      label_en: Registration Date
-      data_type: ui_date
-      required: false
-    entity_name:
-      description_en: The legal name of entity
-      label_en: Name
-      data_type: ui_name
-      required: true
-    entity_name_effective:
-      description_en: Date current name became effective
-      label_en: Name Effective Date
-      data_type: ui_date
-      required: true
-    addressee:
-      description: addressee
-      data_type: ui_text
-      required: true
-    address_line_1:
-      description: address_line_1
-      data_type: ui_text
-      required: true
-    city:
-      description: city
-      data_type: ui_text
-      required: true
-    province:
-      description: province
-      data_type: ui_text
-      required: true
-    postal_code:
-      description: postal_code
-      data_type: ui_text
-      required: true
-    country:
-      description: country
-      data_type: ui_text
-      required: true
-    entity_status:
-      description_en: Status of the entity (active or historical)
-      label_en: Registration Status
-      data_type: ui_select
-      required: true
-    entity_status_effective:
-      description_en: Date status became effective
-      label_en: Status Effective Date
-      data_type: ui_date
-      required: true
-    entity_type:
-      description_en: Type of entity incorporated or registered
-      label_en: Registration Type
-      data_type: ui_text
-      required: true
-    registered_jurisdiction:
-      description_en: The jurisdiction an entity was created in
-      label_en: Registered Jurisdiction
-      data_type: ui_text
-      required: false
+    subject_id:
+      description_en: Subject ID
+      label_en: Subject ID
+    credential_id:
+      description_en: Credential ID
+      label_en: Credential ID
+    supplier_legal_name:
+      description_en: Supplier Legal Name
+      label_en: Supplier Legal Name
+    supplier_names:
+      description_en: Supplier Names
+      label_en: Supplier Names
+    supplier_locations:
+      description_en: Supplier Locations
+      label_en: Supplier Locations
     effective_date:
-      description_en: Date Credential is effective
-      label_en: Credential Effective Date
-      data_type: ui_date
-      required: true
-    expiry_date:
-      description_en: Date Credential expired
-      label_en: Credential Expiry Date
-      data_type: ui_date
-      required: false
-- name: my-relationship.my-organization
-  version: 1.0.0
-  description: The relationship between two organizations
+      description_en: Effective Date
+      label_en: Effective Date
+
+- name: pspc-tender-credential.pspc
+  version: '1.0.0'
+  description: The pspc-tender-credential credential issued by Public Services and Procurement Canada
   attributes:
-    corp_num:
-      description_en: Unique identifer assigned to entity by registrar
-      label_en: Registration ID
-      data_type: ui_text
+    subject_id:
+      description_en: Subject ID
+      label_en: Subject ID
+    credential_id:
+      description_en: Credential ID
+      label_en: Credential ID
+    solicitation_number:
+      description_en: Solicitation Number
+      label_en: Solicitation Number
+    title_fr:
+      description_en: Title French
+      label_en: Title French
+    title_en:
+      description_en: Title English
+      label_en: Title English
+    publication_date:
+      description_en: Publication Date
+      label_en: Publication Date
+    amendment_number:
+      description_en: Amendment Number
+      label_en: Amendment Number
+    amendment_date:
+      description_en: Amendment Date
+      label_en: Amendment Date
+    closing_date:
+      description_en: Closing Date
+      label_en: Closing Date
+    status:
+      description_en: Status
+      label_en: Status
+    gsin_number:
+      description_en: GSIN Number
+      label_en: GSIN Number
+    gsin_en:
+      description_en: GSIN English
+      label_en: GSIN English
+    gsin_fr:
+      description_en: GSIN French
+      label_en: GSIN French
+    tender_uri_fr:
+      description_en: Tender URI French
+      label_en: Tender URI French
+    tender_uri_en:
+      description_en: Tender URI English
+      label_en: Tender URI English
+    effective_date:
+      description_en: Effective Date
+      label_en: Effective Date
+    
+
+- name: pspc-contract-credential.pspc
+  version: '1.0.0'
+  description: The pspc-contract-credential credential issued by Public Services and Procurement Canada
+  attributes:
+    subject_id:
+      description_en: Subject ID
+      label_en: Subject ID
+    credential_id:
+      description_en: Credential ID
+      label_en: Credential ID
+    contract_number:
+      description_en: Contract Number
+      label_en: Contract Number
+    contract_award_date:
+      description_en: Contract Award Date
+      label_en: Contract Award Date
+    amendment_number:
+      description_en: Amendment Number
+      label_en: Amendment Number
+    amendment_date:
+      description_en: Amendment Date
+      label_en: Amendment Date
+    contract_value:
+      description_en: Contract / amendment value
+      label_en: Contract / amendment value
+    supplier_id:
+      description_en: Supplier ID
+      label_en: Supplier ID
+    supplier_legal_name:
+      description_en: Supplier Legal Name
+      label_en: Supplier Legal Name
+    customer_name_en:
+      description_en: Customer Name English
+      label_en: Customer Name English
+    customer_name_fr:
+      description_en: Customer Name French
+      label_en: Customer Name French
+    customer_address_city:
+      description_en: Customer Address City
+      label_en: Customer Address City
+    customer_address_prov:
+      description_en: Customer Address Province
+      label_en: Customer Address Province
+    contract_uri_fr:
+      description_en: Contract URI French
+      label_en: Contract URI French
+    contract_uri_en:
+      description_en: Contract URI English
+      label_en: Contract URI English
+    contract_title_name_en:
+      description_en: Contract title or name English
+      label_en: Contract title or name English
+    contract_title_name_fr:
+      description_en: Contract title or name French
+      label_en: Contract title or name French
+    effective_date:
+      description_en: Effective Date
+      label_en: Effective Date
+
+- name: pspc-aboriginal-business-credential.pspc
+  version: '1.0.0'
+  description: The pspc-aboriginal-business-credential credential issued by Public Services and Procurement Canada
+  attributes:
+    subject_id:
+      description_en: Subject ID
+      label_en: Subject ID
+    credential_id:
+      description_en: Credential ID
+      label_en: Credential ID
+    supplier_id:
+      description_en: Supplier ID
+      label_en: Supplier ID
+    primary_industry:
+      description_en: Primary Industry
+      label_en: Primary Industry
+    contact:
+      description_en: Contact
+      label_en: Contact
+    email:
+      description_en: Email
+      label_en: Email
+    years_active:
+      description_en: Years Active
+      label_en: Years Active
+    effective_date:
+      description_en: Effective Date
+      label_en: Effective Date
+
+- name: pspc-organization-security-credential.pspc
+  version: '1.0.0'
+  description: The pspc-organization-security-credential credential issued by Public Services and Procurement Canada
+  attributes:
+    subject_id:
+      description_en: Subject ID
+      label_en: Subject ID
+    credential_id:
+      description_en: Credential ID
+      label_en: Credential ID
+    supplier_id:
+      description_en: Supplier ID
+      label_en: Supplier ID
+    screening_level:
+      description_en: Designated organization screening level
+      label_en: Designated organization screening level
+    screening_expiry:
+      description_en: Designated organization screening expiry
+      label_en: Designated organization screening expiry
+    clearance_level:
+      description_en: Facility security clearance level
+      label_en: Facility security clearance level
+    clearance_expiry:
+      description_en: Facility security clearance expiry
+      label_en: Facility security clearance expiry
+    capability_level:
+      description_en: Document safeguarding capability level
+      label_en: Document safeguarding capability level
+    capability_expiry:
+      description_en: Document safeguarding capability expiry
+      label_en: Document safeguarding capability expiry
+    effective_date:
+      description_en: Effective Date
+      label_en: Effective Date
+      
+#- name: pspc-tender-contract-relationship.pspc
+#  version: 1.0.0
+#  description: The relationship between Tenders and Contracts
+#  attributes:
+#    tender_subject_id:
+#      description_en: Unique identifer assigned to a tender
+#      label_en: Tender Subject ID
+#      required: true
+#    contract_subject_id:
+#      description_en: Unique identifer assigned to a contract
+#      label_en: Contract Subject ID
+#      required: true
+#    effective_date:
+#      description_en: Date Credential is effective
+#      label_en: Effective Date
+#      data_type: ui_date
+#      required: true
+
+- name: pspc-supplier-contract-relationship.pspc
+  version: 1.0.0
+  description: The relationship between Suppliers and Contracts
+  attributes:
+    supplier_subject_id:
+      description_en: Unique identifer assigned to a supplier
+      label_en: Supplier Subject ID
       required: true
-    associated_corp_num:
-      description_en: Registry id(s) of associated organizations/individuals
-      label_en: Associated Registration ID
-      data_type: ui_text
+    contract_subject_id:
+      description_en: Unique identifer assigned to a contract
+      label_en: Contract Subject ID
       required: true
-    associated_registration_name:
-      description_en: Registered name of associated organizations/individuals
-      label_en: Associated Registration Namwe
-      data_type: ui_text
-      required: false
-    relationship:
-      description_en: Name of the relationship
-      label_en: Relationship
-      data_type: ui_text
-      required: true
-    relationship_description:
-      description_en: Description of the relationship
-      label_en: Relationship Description
-      data_type: ui_text
-      required: true
-    relationship_status:
-      description_en: Status of the relationship
-      label_en: Relationship Status
-      data_type: ui_select
-      required: true
-    relationship_status_effective:
-      description_en: Date the relationship became/becomes effective
-      label_en: Relationship Status Effective
-      data_type: ui_date
-      required: false
     effective_date:
       description_en: Date Credential is effective
       label_en: Effective Date
       data_type: ui_date
       required: true
-    expiry_date:
-      description_en: Date Credential expires
-      label_en: Credential Expiry Date
-      data_type: ui_date
-      required: false
-- name: my-permit.my-organization
-  version: 1.0.0
-  description: The my-permit credential issued by my-organization
-  attributes:
-    corp_num:
-      description_en: Registration/Incorporation Number or Identifying Number
-      label_en: Registration ID
-      data_type: ui_text
-      required: true
-    entity_name:
-      description_en: The legal name of entity
-      label_en: Name
-      data_type: ui_name
-      required: true
-    permit_id:
-      description_en: Permit Identifying Number
-      label_en: Permit ID
-      data_type: helper_uuid
-      required: true
-    permit_type:
-      description_en: Status of the permit
-      label_en: Permit Type
-      data_type: ui_select
-      required: true
-    permit_issued_date:
-      description_en: Date Permit is issued
-      label_en: Permit Issued Date
-      data_type: ui_date
-      required: true
-    permit_status:
-      description_en: Status of the permit
-      label_en: Permit Status
-      data_type: ui_select
-      required: true
-    effective_date:
-      description_en: Date Credential is effective
-      label_en: Credential Effective Date
-      data_type: ui_date
-      required: true
-
+    
+    
 ### eof ###
 

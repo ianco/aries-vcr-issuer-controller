@@ -1,0 +1,112 @@
+[
+    {
+        "attributes": {
+            "title_en": "5.6-6.0M ALUMINIUM LANDING CRAFTS/SEA TRUCKS WITH TRAILERS (F7047-130043/A)",
+            "subject_id": "PW-$$MC-024-24476",
+            "solicitation_number": "F7047-130043/A",
+            "amendment_number": "1",
+            "publication_date": "2014-05-14",
+            "closing_date": "2014-07-03 14:00 Eastern Daylight Time (EDT)",
+            "amendment_date": "2014-06-26",
+            "status": "Awarded",
+            "gsin_number": "N1940",
+            "gsin_en": "Small Craft",
+            "title_fr": "CHALANDS DE DÉBARQUEMEN/REMORQUEURS DE 5,6- 6,0M AVEC REMORQUES (F7047-130043/A)",
+            "gsin_fr": "Embarcations légères",
+            "credential_id": "3333333377777",
+            "tender_uri_fr": "",
+            "tender_uri_en": "",
+            "effective_date": "2019-11-18"
+        },
+        "schema": "pspc-tender-credential.pspc",
+        "version": "1.0.0"
+    },
+    {
+        "attributes": {
+            "title_en": "5.6-6.0M ALUMINIUM LANDING CRAFTS/SEA TRUCKS (F7047-100134/A)",
+            "subject_id": "PW-$$MC-011-21176",
+            "solicitation_number": "F7047-100134/A",
+            "amendment_number": "1",
+            "publication_date": "2014-05-14",
+            "closing_date": "2014-06-09 14:00 Eastern Daylight Time (EDT)",
+            "amendment_date": "2014-06-26",
+            "status": "Awarded",
+            "gsin_number": "N1940",
+            "gsin_en": "Small Craft",
+            "title_fr": "CHALANDS DE DÉBARQUEMEN/REMORQUEURS DE 5,6- 6,0M (F7047-100134/A)",
+            "gsin_fr": "Embarcations légères",
+            "credential_id": "3333333377777",
+            "tender_uri_fr": "",
+            "tender_uri_en": "",
+            "effective_date": "2019-11-18"
+        },
+        "schema": "pspc-tender-credential.pspc",
+        "version": "1.0.0"
+    },
+    {
+        "attributes": {
+            "title_en": "CCGS VIOLA M. DAVIDSON REFIT (F5561-142005/A)",
+            "subject_id": "PW-$HAL-403-9224",
+            "solicitation_number": "F5561-142005/A",
+            "amendment_number": "2",
+            "publication_date": "2014-03-05",
+            "closing_date": "2014-03-31 14:00 Atlantic Daylight Time (ADT)",
+            "amendment_date": "2014-03-27",
+            "status": "Awarded",
+            "gsin_number": "JX1990B",
+            "gsin_en": "Ships, and Vessels (small) - Repair, Refits and Conversions (including Dry Docks)",
+            "title_fr": "CARÉNAGE - NGCC VIOLA M DAVIDSON (F5561-142005/A)",
+            "gsin_fr": "Navires et bateaux, de petites dimensions - réparation, radoub et transformation, (mise en case sèche comprise)",
+            "credential_id": "3333333377777",
+            "tender_uri_fr": "",
+            "tender_uri_en": "",
+            "effective_date": "2019-11-18"
+        },
+        "schema": "pspc-tender-credential.pspc",
+        "version": "1.0.0"
+    },
+    {
+        "attributes": {
+            "title_en": "Fab & Del 27' Alum L C  w/Trailer (5P427-140002/B)",
+            "subject_id": "PW-$XLV-175-6623",
+            "solicitation_number": "5P427-140002/B",
+            "amendment_number": "0",
+            "publication_date": "2014-12-17",
+            "closing_date": "2015-01-26 14:00 Pacific Standard Time (PST)",
+            "amendment_date": "",
+            "status": "Awarded",
+            "gsin_number": "N1940G",
+            "gsin_en": "Boats, Small, Aluminum",
+            "title_fr": "Concevoir, construire, tester et livrer un (1) navire de débarquement à propulsion hors bord en alum (5P427-140002/B)",
+            "gsin_fr": "Bateaux légers, aluminium",
+            "credential_id": "3333333377777",
+            "tender_uri_fr": "",
+            "tender_uri_en": "",
+            "effective_date": "2019-11-18"
+        },
+        "schema": "pspc-tender-credential.pspc",
+        "version": "1.0.0"
+    },
+    {
+        "attributes": {
+            "title_en": "SA - Small Vessel Dockings Atlantic Canada (F5561-142801/A)",
+            "subject_id": "PW-$HAL-302-9374",
+            "solicitation_number": "F5561-142801/A",
+            "amendment_number": "0",
+            "publication_date": "2014-11-13",
+            "closing_date": "2014-12-15 14:00 Atlantic Standard Time (AST)",
+            "amendment_date": "",
+            "status": "Awarded",
+            "gsin_number": "JX1990B",
+            "gsin_en": "Ships, and Vessels (small) - Repair, Refits and Conversions (including Dry Docks)",
+            "title_fr": "AMA - Cales Seches Petits Navires Canada Atlantique (F5561-142801/A)",
+            "gsin_fr": "Navires et bateaux, de petites dimensions - réparation, radoub et transformation, (mise en case sèche comprise)",
+            "credential_id": "3333333377777",
+            "tender_uri_fr": "",
+            "tender_uri_en": "",
+            "effective_date": "2019-11-18"
+        },
+        "schema": "pspc-tender-credential.pspc",
+        "version": "1.0.0"
+    }
+]
