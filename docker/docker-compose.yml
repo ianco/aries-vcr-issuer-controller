@@ -92,7 +92,7 @@ services:
       - AGENT_ADMIN_PORT=${AGENT_ADMIN_PORT}
       - AGENT_NAME=${AGENT_NAME}
     networks:
-#local      - orgbook
+      - orgbook
       - myorg
     ports:
       - ${AGENT_HTTP_IN_PORT}:${AGENT_HTTP_IN_PORT}
@@ -210,6 +210,6 @@ volumes:
 
 networks:
   myorg:
-#local  orgbook:
-#local    external:
-#local      name: vcr_vcr
+  orgbook:
+    external:
+      name: vcr_vcr
