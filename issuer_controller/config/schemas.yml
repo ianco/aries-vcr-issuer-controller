@@ -75,7 +75,6 @@
     effective_date:
       description_en: Effective Date
       label_en: Effective Date
-    
 
 - name: pspc-contract-credential.pspc
   version: '1.0.0'
@@ -199,7 +198,7 @@
     effective_date:
       description_en: Effective Date
       label_en: Effective Date
-      
+
 #- name: pspc-tender-contract-relationship.pspc
 #  version: 1.0.0
 #  description: The relationship between Tenders and Contracts
@@ -235,7 +234,24 @@
       label_en: Effective Date
       data_type: ui_date
       required: true
-    
-    
+
+- name: pspc-contract-supplier-relationship.pspc
+  version: 1.0.0
+  description: The relationship between Suppliers and Contracts
+  attributes:
+    contract_subject_id:
+      description_en: Unique identifer assigned to a contract
+      label_en: Contract Subject ID
+      required: true
+    supplier_subject_id:
+      description_en: Unique identifer assigned to a supplier
+      label_en: Supplier Subject ID
+      required: true
+    effective_date:
+      description_en: Date Credential is effective
+      label_en: Effective Date
+      data_type: ui_date
+      required: true
+
 ### eof ###
 

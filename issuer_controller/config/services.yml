@@ -34,7 +34,7 @@ issuers:
     - description: PSPC Supplier
       schema: pspc-supplier-credential.pspc
       issuer_url: $APPLICATION_URL/pspc/pspc-supplier-credential
-      
+
       credential:
         effective_date:
           input: effective_date
@@ -89,7 +89,7 @@ issuers:
     - description: PSPC Tender Notice
       schema: pspc-tender-credential.pspc
       issuer_url: $APPLICATION_URL/pspc/pspc-tender-credential
-      
+
       credential:
         effective_date:
           input: effective_date
@@ -224,7 +224,7 @@ issuers:
     - description: PSPC Contract
       schema: pspc-contract-credential.pspc
       issuer_url: $APPLICATION_URL/pspc/pspc-contract-credential
-      
+
       credential:
         effective_date:
           input: effective_date
@@ -375,7 +375,7 @@ issuers:
     - description: PSPC Aboriginal Business
       schema: pspc-aboriginal-business-credential.pspc
       issuer_url: $APPLICATION_URL/pspc/pspc-aboriginal-business-credential
-      
+
       credential:
         effective_date:
           input: effective_date
@@ -442,11 +442,11 @@ issuers:
             value:
               input: years_active
               from: claim        
-              
+
     - description: PSPC Organizational Security
       schema: pspc-organization-security-credential.pspc
       issuer_url: $APPLICATION_URL/pspc/pspc-organization-security-credential
-      
+
       credential:
         effective_date:
           input: effective_date
@@ -529,7 +529,7 @@ issuers:
             value:
               input: capability_expiry
               from: claim                                         
-    
+
     - description: The relationship between Suppliers and Contracts
       schema: pspc-supplier-contract-relationship.pspc
       issuer_url: $APPLICATION_URL/pspc/pspc-supplier-contract-relationship-credential
@@ -542,7 +542,7 @@ issuers:
           input: contract_subject_id
           from: claim
         related_type:
-          input: pspc-supplier-contract-relationship.pspc
+          input: pspc-contract-supplier-relationship.pspc
           from: value
         source_id:
           input: supplier_subject_id
@@ -551,7 +551,6 @@ issuers:
           input: pspc-supplier-contract-relationship.pspc
           from: value
       cardinality_fields:
-        - supplier_subject_id
         - contract_subject_id
       mapping:
       - model: attribute
@@ -581,7 +580,58 @@ issuers:
           value:
             input: effective_date
             from: claim
-      
+
+    - description: The relationship between Suppliers and Contracts
+      schema: pspc-contract-supplier-relationship.pspc
+      issuer_url: $APPLICATION_URL/pspc/pspc-contract-supplier-relationship-credential
+      credential:
+        effective_date:
+          input: effective_date
+          from: claim
+      topic:
+        source_id:
+          input: contract_subject_id
+          from: claim
+        type:
+          input: pspc-contract-supplier-relationship.pspc
+          from: value
+        related_source_id:
+          input: supplier_subject_id
+          from: claim
+        related_type:
+          input: pspc-supplier-contract-relationship.pspc
+          from: value
+      cardinality_fields:
+        - supplier_subject_id
+      mapping:
+      - model: attribute
+        fields:
+          type:
+            input: supplier_subject_id
+            from: value
+          value:
+            input: supplier_subject_id
+            from: claim
+      - model: attribute
+        fields:
+          type:
+            input: contract_subject_id
+            from: value
+          value:
+            input: contract_subject_id
+            from: claim
+      - model: attribute
+        fields:
+          type:
+            input: effective_date
+            from: value
+          format:
+            input: datetime
+            from: value
+          value:
+            input: effective_date
+            from: claim
+
 verifiers:
   bctob:
     name: PSPC OrgBook
