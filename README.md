@@ -12,7 +12,7 @@ Still not sure what this is? Please see this [Getting started with VON](https://
 
 ### Aries VCR Issuer Controller or Agent
 
-Aries Agents consist of two parts, a framework that handles all of the Aries agent type functions (e.g. messages, protocols, protocol state, agent storage, etc.) and a controller that provides the business logic that gives the agent personality. As such, we talk about the code in this repo as the Controller. When the controller code is deployed along with an instance of an agent framework&mdash;ACA-Py&mdash;we have an Aries VCR Issuer agent.  As such, in this repo we might take about the code in this repo (the Aries VCR Issuer Controller) or a deployed and running Aries VCR Issuer Agent.
+Aries Agents consist of two parts, a framework that handles all of the Aries agent type functions (e.g. messages, protocols, protocol state, agent storage, etc.) and a controller that provides the business logic that gives the agent personality. As such, we talk about the code in this repo as the Controller. When the controller code is deployed along with an instance of an agent framework&mdash;ACA-Py&mdash;we have an Aries VCR Issuer agent.  As such, in this repo we might talk about the code in this repo (the Aries VCR Issuer Controller), or talk about a deployed and running Aries VCR Issuer Agent.
 
 Make sense?
 
@@ -45,6 +45,41 @@ If you are creating an agent for a service organization that will become an Arie
 2. Make a fork of this repo, and in that, create a branch that you will use as the deployment branch for your agent instance. The benefit of this approach is that you can stay up-to-date with the base repo by applying commits to your branch from the `master`. The downside is a much more complex branching model for your developers and a non-typical deployment model for your code.
 
 In theory, the two mechanisms above can be combined, and branches could be created in the main repo for the different agent instances. This might be an approach that, for example, the BC Gov could use&mdash;creating a branch for each OrgBookBC Issuer agent in BC Gov. However, we think that the benefits of such a scheme is not worth the complexity.
+
+## Running Locally in "dev" mode
+
+When you run everything locally (von-network, aries-vcr and the issuer/controller), your issuer will automatically establish a connection between your agent and the OrgBook agent.  There are two settings that control this behaviour:
+
+```
+REGISTER_TOB_CONNECTION - set to "true" (the default) to auto-connect to the TOB agent
+TOB_AGENT_ADMIN_URL - set to the TOB agent admin API url (the default setting) to allow the issuer controller to request an invitation
+```
+
+(If `REGISTER_TOB_CONNECTION` is not `true` *or* the `TOB_AGENT_ADMIN_URL` is *not* set then the issuer /controller will *not* auto-connect.)
+
+Once the issuer/controller has started and completed initilization then credentials can be issued to OrgBook.
+
+## Deploying Your Issuer Controller on OpenShift
+
+When you are running locally, your issuer controller will automatically establish a connection between your agent and the OrgBook agent.  However when you deploy on OpenShift and connect to one of the OrgBook environments (dev, test or prod) this is not possible, and the agent connection must be established manually.  The two settings mentioned in the previous section must be set (leaving `TOB_AGENT_ADMIN_URL` unset is sufficient).
+
+The following steps are required:
+
+1. Request an Invitation from the OrgBook agent: `/connections/create-invitation`
+
+2. Receive this Invitation in your agent: `/connections/receive-invitation` - set the `alias` to `vcr-agent` (or whatever value you have set here: https://github.com/bcgov/aries-vcr-issuer-controller/blob/master/issuer_controller/config/services.yml#L340)
+
+3. (Depending on your agent startup parameters) Accept this invitation through your agent `/connections/<conn_id>/accept-invitation`.  (if your aca-py agent is started with `--auto-accept-invitation` then you don't need to do this step)
+
+4. Verify your connection status
+
+To test this process on a local installation (i.e. your local workstation), use the following startup command:
+
+```bash
+REGISTER_TOB_CONNECTION=false ./manage start
+```
+
+This will startup your Issuer Controller *without* an orgbook connection and you will need to follow the above steps.  Once the connection is established your Issuer will be registered with your local OrgBook.  You cannot issue credentials to OrgBook until you have established a connection between your agent and the OrgBook agent, and your issuer has registered itself with OrgBook.
 
 ## Getting Help or Reporting an Issue
 
