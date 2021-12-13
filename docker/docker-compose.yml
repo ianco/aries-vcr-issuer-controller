@@ -79,7 +79,7 @@ services:
         ./docker-entrypoint.sh;"
 
   myorg-agent:
-    image: vcr-agent
+    image: vcr-agent:1.7.0
     environment:
       - LEDGER_URL=${LEDGER_URL}
       - WALLET_TYPE=${WALLET_TYPE}
